@@ -23,6 +23,6 @@ public class Agree {
 	private AgreePK agreePK;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date agree_at;
+	private Date agreeAt;
 
 }

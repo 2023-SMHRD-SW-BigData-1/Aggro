@@ -26,14 +26,14 @@ public class NoticeBoard {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long notice_seq;
+	private Long noticeSeq;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private UserInfo user_id;
+	@JoinColumn(name = "userId")
+	private UserInfo userId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date notice_at;
+	private Date noticeAt;
 	
 	@Column(length = 100, nullable = false)
 	private String title;

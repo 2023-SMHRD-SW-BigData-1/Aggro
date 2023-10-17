@@ -26,20 +26,20 @@ public class SentimentDetails {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long sentiment_seq;
+	private Long sentimentSeq;
 	
 	@OneToOne
-	@JoinColumn(name="crawl_seq",referencedColumnName = "crawl_seq")
-	private CrawlSite crawl_seq;
+	@JoinColumn(name="crawlSeq",referencedColumnName = "crawlSeq")
+	private CrawlSite crawlSeq;
 	
 	@Column(length = 4000, nullable = false)
-	private String sent_details;
+	private String sentDetails;
 	
 	@Column(length = 100, nullable = false)
 	private String sentiment;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date sentiment_at;
+	private Date sentimentAt;
 	
 	
 }

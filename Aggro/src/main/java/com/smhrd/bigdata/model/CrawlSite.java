@@ -24,17 +24,17 @@ public class CrawlSite {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long crawl_seq;
+	private Long crawlSeq;
 	
 	@Column(length = 100, nullable = false)
-	private String class_a;
+	private String classA;
 	
 	@Column(length = 100, nullable = false)
-	private String class_b;
+	private String classB;
 	
 	@Column(length = 300, nullable = false)
-	private String crawl_url;
+	private String crawlUrl;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date crawl_at;
+	private Date crawlAt;
 }

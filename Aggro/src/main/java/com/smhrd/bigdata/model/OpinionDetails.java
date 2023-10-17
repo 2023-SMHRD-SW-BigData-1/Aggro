@@ -26,16 +26,16 @@ public class OpinionDetails {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long opinion_seq;
+	private Long opinionSeq;
 	
 	@OneToOne
-	@JoinColumn(name="crawl_seq",referencedColumnName = "crawl_seq")
-	private CrawlSite crawl_seq;
+	@JoinColumn(name="crawlSeq",referencedColumnName = "crawlSeq")
+	private CrawlSite crawlSeq;
 	
 	@Column(length = 4000, nullable = false)
-	private String opinion_details;
+	private String opinionDetails;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date opinion_at;
+	private Date opinionAt;
 	
 }

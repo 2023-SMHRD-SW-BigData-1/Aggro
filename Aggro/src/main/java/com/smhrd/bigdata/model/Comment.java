@@ -26,19 +26,19 @@ public class Comment {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long comment_seq;
+	private Long commentSeq;
 	
 	@ManyToOne
-	@JoinColumn(name = "notice_seq")
-	private NoticeBoard notice_seq;
+	@JoinColumn(name = "noticeSeq")
+	private NoticeBoard noticeSeq;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private UserInfo user_id;
+	@JoinColumn(name = "userId")
+	private UserInfo userId;
 	
 	@Column(length = 100, nullable = false)
 	private String details;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date comment_at;
+	private Date commentAt;
 }

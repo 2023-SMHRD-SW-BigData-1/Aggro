@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 public class AgreePK implements Serializable{
 	
 	@ManyToOne
-	@JoinColumn(name="notice_seq")
-	private NoticeBoard notice_seq;
+	@JoinColumn(name="noticeSeq")
+	private NoticeBoard noticeSeq;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private UserInfo user_id;
+	@JoinColumn(name = "userId")
+	private UserInfo userId;
 	
 }

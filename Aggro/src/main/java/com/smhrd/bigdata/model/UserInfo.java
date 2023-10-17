@@ -22,19 +22,19 @@ public class UserInfo {
 	
 	@Id
 	@Column(length = 100)
-	private String user_id;
+	private String userId;
 	
 	@Column(length = 100, nullable = false)
-	private String user_pw;
+	private String userPw;
 	
 	@Column(length = 100, nullable = false)
-	private String user_nick;
+	private String userNick;
 	
 	@Column(length = 100, nullable = false)
-	private String user_class;
+	private String userClass;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
-	private Date join_at;
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
+	private Date joinAt;
 	
 }
