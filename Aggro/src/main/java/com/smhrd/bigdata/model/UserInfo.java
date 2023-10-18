@@ -19,22 +19,22 @@ import lombok.Setter;
 @Table
 @Entity
 public class UserInfo {
-	
+
 	@Id
 	@Column(length = 100)
 	private String userId;
-	
+
 	@Column(length = 100, nullable = false)
 	private String userPw;
-	
+
 	@Column(length = 100, nullable = false)
 	private String userNick;
-	
+
 	@Column(length = 100, nullable = false)
 	private String userClass;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
 	private Date joinAt;
-	
+
 }

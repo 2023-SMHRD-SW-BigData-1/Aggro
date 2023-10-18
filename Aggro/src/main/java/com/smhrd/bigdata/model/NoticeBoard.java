@@ -33,6 +33,7 @@ public class NoticeBoard {
 	private UserInfo userId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
 	private Date noticeAt;
 	
 	@Column(length = 100, nullable = false)
