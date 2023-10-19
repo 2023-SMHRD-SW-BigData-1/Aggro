@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.smhrd.bigdata.dto.CommunityDto;
 import com.smhrd.bigdata.dto.Post;
+import com.smhrd.bigdata.entity.Agree;
 import com.smhrd.bigdata.entity.AgreePK;
 import com.smhrd.bigdata.entity.Comment;
 import com.smhrd.bigdata.entity.CommunityHits;
@@ -29,10 +30,10 @@ public class CommunityService {
 
 	@Autowired
 	CommentRepository commentRepository;
-	
+
 	@Autowired
 	AgreeRepository agreeRepository;
-	
+
 	@Autowired
 	CommunityHitsRepository communityHitsRepository;
 
@@ -82,56 +83,83 @@ public class CommunityService {
 	// 게시글 하나 검색하기
 	public CommunityDto findOneByNoticeSeq(Long noticeSeq) {
 		NoticeBoard board = communityRepository.findOneByNoticeSeq(noticeSeq);
-		
-		
-		if(board != null) {
-			
+
+		if (board != null) {
+
 			CommunityDto dto = new CommunityDto(); // 모든 것을 담을 공간
 			dto.setType(1); // dto 세팅
 
 			Post post = new Post(); // 게시글 담을 공간
-			
+
 			post.setBoard(board); // 게시글 정보 담기
 			post.setReplies(commentRepository.findAllByNoticeSeq(board)); // 댓글 정보 담기
-			
+
 			// 추천수 확인을 위한 데이터 세팅하기
 			AgreePK agreePK = new AgreePK();
-			
+
 			agreePK.setNoticeSeq(post);
 			agreePK.setUserId(post.getUserId());
-			
+
 			// 추천수 데이터 가져오기
 			post.setLikeCount(agreeRepository.countAllByAgreePK(agreePK));
-			
+
 			// 조회수 가져오기
 			post.setViewCount(communityHitsRepository.countAllByNoticeSeq(board));
-			
+
 			dto.setPost(post);
-			
+
 			return dto;
 		}
-		
+
 		return null;
 	}
-	
+
 	// 조회수 업데이트
 	public void updateCommunityHits(Long noticeSeq) {
 
 		// 게시글 번호 저장
 		NoticeBoard board = new NoticeBoard();
 		board.setNoticeSeq(noticeSeq);
-		
+
 		CommunityHits hits = new CommunityHits();
-		
+
 		hits.setNoticeSeq(board);
-		
+
 		communityHitsRepository.save(hits);
 	}
-	
+
 	// 게시글 삭제
 	public void deleteNoticeBoard(Long noticeSeq) {
-		
 		communityRepository.deleteById(noticeSeq);
-		
+	}
+
+	// 게시글 수정
+	public void updateNoticeBoard(NoticeBoard board) {
+		communityRepository.save(board);
+	}
+
+	// 댓글 작성
+	public void saveCommentWrite(Comment comment) {
+		commentRepository.save(comment);
+	}
+
+	// 댓글 삭제
+	public void deleteComment(Long commentSeq) {
+		commentRepository.deleteById(commentSeq);
+	}
+
+	public void saveAgree(AgreePK agreePK, Long noticeSeq) {
+
+		NoticeBoard board = new NoticeBoard();
+
+		board.setNoticeSeq(noticeSeq);
+		agreePK.setNoticeSeq(board);
+
+		Agree agree = new Agree();
+
+		agree.setAgreePK(agreePK);
+
+		agreeRepository.save(agree);
+
 	}
 }

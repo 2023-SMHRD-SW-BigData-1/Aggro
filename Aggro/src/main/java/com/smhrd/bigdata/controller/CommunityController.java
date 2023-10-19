@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.smhrd.bigdata.dto.CommunityDto;
 import com.smhrd.bigdata.dto.RequestBoardDetail;
 import com.smhrd.bigdata.dto.RequestBoardList;
+import com.smhrd.bigdata.entity.AgreePK;
 import com.smhrd.bigdata.entity.NoticeBoard;
 import com.smhrd.bigdata.service.CommunityService;
 import com.smhrd.bigdata.service.JwtTokenService;
@@ -62,11 +61,11 @@ public class CommunityController {
 		jwtToken = jwtToken.replace("Bearer ", "");
 		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
 
-		if (result) { // 토큰값이 유효해야 저장할 수 있음
-			communityService.write(board);
-		} else {
+		if (!result) { // 토큰값이 유효해야 저장할 수 있음
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰값 만료");
 		}
+
+		communityService.write(board);
 
 		return null;
 	}
@@ -88,7 +87,8 @@ public class CommunityController {
 
 	// 조회수 업데이트
 	@PutMapping("/update/view/{noticeSeq}")
-	public void update(@PathVariable("noticeSeq") Long noticeSeq, @RequestHeader("Authorization") String jwtToken) {
+	public void updateViewCount(@PathVariable("noticeSeq") Long noticeSeq,
+			@RequestHeader("Authorization") String jwtToken) {
 		// 토큰 전처리
 		jwtToken = jwtToken.replace("Bearer ", "");
 		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
@@ -105,15 +105,52 @@ public class CommunityController {
 		jwtToken = jwtToken.replace("Bearer ", "");
 		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
 
-		if (result) { // 토큰값이 유효해야 저장할 수 있음
-
-			communityService.deleteNoticeBoard(noticeSeq);
-
-		} else {
+		if (!result) { // 토큰값이 유효해야 저장할 수 있음
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰값 만료");
+
 		}
+		communityService.deleteNoticeBoard(noticeSeq);
 
 		return null;
+	}
+
+	// 게시글 수정
+	@PutMapping("/update")
+	public ResponseEntity<String> updateBoard(@RequestBody NoticeBoard board,
+			@RequestHeader("Authorization") String jwtToken) {
+
+		// 토큰 전처리
+		jwtToken = jwtToken.replace("Bearer ", "");
+		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
+
+		if (!result) { // 토큰값이 유효해야 저장할 수 있음
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰값 만료");
+
+		}
+
+		communityService.updateNoticeBoard(board);
+
+		return null;
+
+	}
+
+	// 게시글 추천
+	@PutMapping("/update/like/{noticeSeq}")
+	public RequestBoardDetail updateAgree(@RequestBody AgreePK agreePK, @PathVariable("noticeSeq") Long noticeSeq,
+			@RequestHeader("Authorization") String jwtToken) {
+
+		Gson gson = new Gson();
+		// 토큰 전처리
+		jwtToken = jwtToken.replace("Bearer ", "");
+		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
+
+		if (!result) { // 토큰값이 유효해야 저장할 수 있음
+			return detailBoard(noticeSeq);
+		}
+
+		communityService.saveAgree(agreePK, noticeSeq);
+
+		return detailBoard(noticeSeq);
 	}
 
 }
