@@ -1,9 +1,6 @@
 package com.smhrd.bigdata.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.JsonArray;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.smhrd.bigdata.model.NoticeBoard;
+import com.smhrd.bigdata.dto.CommunityDto;
+import com.smhrd.bigdata.dto.RequestBoardDetail;
+import com.smhrd.bigdata.dto.RequestBoardList;
+import com.smhrd.bigdata.entity.NoticeBoard;
 import com.smhrd.bigdata.service.CommunityService;
 import com.smhrd.bigdata.service.JwtTokenService;
 
@@ -33,31 +33,23 @@ public class CommunityController {
 	@Autowired
 	CommunityService communityService;
 
-	JsonObject jsonObj = new JsonObject();
+	Gson gson = new Gson();
 
 	// 게시글 페이지
 	@GetMapping("/{communityPage}")
-	public String community(@PathVariable("communityPage") int communityPage) {
+	public RequestBoardList community(@PathVariable("communityPage") int communityPage) {
 
 		Pageable pageable = PageRequest.of(communityPage, 10); // 0번째 페이지, 페이지당 10개의 항목
-		Page<NoticeBoard> boardPage = communityService.boardList(pageable); // 페이지화 해서 데이터 가져오기
-		List<NoticeBoard> boardList = boardPage.getContent(); // 가져온 데이이터에서 실제 내용만 가져오기
 
-		JsonArray dataList = communityService.dataList(boardList);
+		RequestBoardList data = new RequestBoardList(); // 반환할 틀 생성
 
-		int statusCode = 204;
+		data.setData(communityService.dataList(pageable)); // 데이터 가져와서 세팅하기
 
-		if (boardList.size() > 0) {
-			statusCode = 200;
+		if (communityPage > 10000 || data.getData().size() < 10) { // 10000 페이지까지 보여주기 or 한 페이지에 10개 미만 이라면 다음 페이지 없음
+			data.setStatusCode(204); // default가 200이므로 제외
 		}
 
-		// --------------------------------------------------
-
-		jsonObj.add("data", dataList);
-
-		jsonObj.addProperty("statusCode", statusCode); // statusCode 추가
-
-		return jsonObj.toString();
+		return data;
 	}
 
 	// 글작성
@@ -77,20 +69,31 @@ public class CommunityController {
 
 		return null;
 	}
-	
+
 	// 자세한 글 보기
 	@GetMapping("/detail/{noticeSeq}")
-	public void detailBoard(@PathVariable("noticeSeq") Long noticeSeq) {
-		System.out.println(noticeSeq);
-		
-		
+	public RequestBoardDetail detailBoard(@PathVariable("noticeSeq") Long noticeSeq) {
+
+		RequestBoardDetail boardDetail = new RequestBoardDetail();
+
+		boardDetail.setData(communityService.findOneByNoticeSeq(noticeSeq));
+
+		if (boardDetail.getData() == null) {
+			boardDetail.setStatusCode(400);
+		}
+
+		return boardDetail;
 	}
-	
+
+	// 조회수 업데이트
 	@PutMapping("/update/view/{noticeSeq}")
-	public void update(@PathVariable("noticeSeq") Long noticeSeq, @RequestHeader("Authorization")String jwtToken) {
+	public void update(@PathVariable("noticeSeq") Long noticeSeq, @RequestHeader("Authorization") String jwtToken) {
 		// 토큰 전처리
 		jwtToken = jwtToken.replace("Bearer ", "");
 		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
+
+		communityService.updateCommunityHits(noticeSeq);
+
 	}
 
 }

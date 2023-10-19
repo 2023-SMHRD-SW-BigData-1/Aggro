@@ -1,4 +1,4 @@
-package com.smhrd.bigdata.model;
+package com.smhrd.bigdata.entity;
 
 import java.util.Date;
 
@@ -22,23 +22,16 @@ import lombok.Setter;
 @Getter
 @Table
 @Entity
-public class NoticeBoard {
-
+public class CommunityHits {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long noticeSeq;
+	private Long hitsSeq;
 	
 	@ManyToOne
-	@JoinColumn(name = "userId")
-	private UserInfo userId;
+	@JoinColumn(name = "noticeSeq")
+	private NoticeBoard noticeSeq;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
-	private Date noticeAt;
-	
-	@Column(length = 100, nullable = false)
-	private String title;
-	
-	@Column(length = 4000, nullable = false)
-	private String details;
+	private Date hitsAt;
 }

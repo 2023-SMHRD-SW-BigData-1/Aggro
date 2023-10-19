@@ -1,7 +1,8 @@
-package com.smhrd.bigdata.model;
+package com.smhrd.bigdata.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -23,6 +24,7 @@ public class Agree {
 	private AgreePK agreePK;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
 	private Date agreeAt;
 
 }

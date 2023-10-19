@@ -1,4 +1,4 @@
-package com.smhrd.bigdata.model;
+package com.smhrd.bigdata.entity;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,20 +22,23 @@ import lombok.Setter;
 @Getter
 @Table
 @Entity
-public class OpinionDetails {
+public class NoticeBoard {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long opinionSeq;
+	private Long noticeSeq;
 	
-	@OneToOne
-	@JoinColumn(name="crawlSeq",referencedColumnName = "crawlSeq")
-	private CrawlSite crawlSeq;
-	
-	@Column(length = 4000, nullable = false)
-	private String opinionDetails;
+	@ManyToOne
+	@JoinColumn(name = "userId")
+	private UserInfo userId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date opinionAt;
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
+	private Date noticeAt;
 	
+	@Column(length = 100, nullable = false)
+	private String title;
+	
+	@Column(length = 4000, nullable = false)
+	private String details;
 }

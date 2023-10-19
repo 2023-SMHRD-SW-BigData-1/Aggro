@@ -1,4 +1,4 @@
-package com.smhrd.bigdata.model;
+package com.smhrd.bigdata.entity;
 
 import java.util.Date;
 
@@ -22,24 +22,21 @@ import lombok.Setter;
 @Getter
 @Table
 @Entity
-public class SentimentDetails {
+public class OpinionDetails {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long sentimentSeq;
+	private Long opinionSeq;
 	
 	@OneToOne
 	@JoinColumn(name="crawlSeq",referencedColumnName = "crawlSeq")
 	private CrawlSite crawlSeq;
 	
 	@Column(length = 4000, nullable = false)
-	private String sentDetails;
-	
-	@Column(length = 100, nullable = false)
-	private String sentiment;
+	private String opinionDetails;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date sentimentAt;
-	
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
+	private Date opinionAt;
 	
 }

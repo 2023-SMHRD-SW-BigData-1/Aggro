@@ -1,4 +1,4 @@
-package com.smhrd.bigdata.model;
+package com.smhrd.bigdata.entity;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,23 +22,25 @@ import lombok.Setter;
 @Getter
 @Table
 @Entity
-public class Comment {
+public class SentimentDetails {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long commentSeq;
+	private Long sentimentSeq;
 	
-	@ManyToOne
-	@JoinColumn(name = "noticeSeq")
-	private NoticeBoard noticeSeq;
+	@OneToOne
+	@JoinColumn(name="crawlSeq",referencedColumnName = "crawlSeq")
+	private CrawlSite crawlSeq;
 	
-	@ManyToOne
-	@JoinColumn(name = "userId")
-	private UserInfo userId;
+	@Column(length = 4000, nullable = false)
+	private String sentDetails;
 	
 	@Column(length = 100, nullable = false)
-	private String details;
+	private String sentiment;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date commentAt;
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
+	private Date sentimentAt;
+	
+	
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonObject;
-import com.smhrd.bigdata.model.UserInfo;
+import com.smhrd.bigdata.entity.UserInfo;
 import com.smhrd.bigdata.service.JwtTokenService;
 import com.smhrd.bigdata.service.MainService;
 

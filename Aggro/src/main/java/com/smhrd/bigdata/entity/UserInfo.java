@@ -1,11 +1,9 @@
-package com.smhrd.bigdata.model;
+package com.smhrd.bigdata.entity;
 
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,21 +18,23 @@ import lombok.Setter;
 @Getter
 @Table
 @Entity
-public class CrawlSite {
+public class UserInfo {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long crawlSeq;
-	
+	@Column(length = 100)
+	private String userId;
+
 	@Column(length = 100, nullable = false)
-	private String classA;
-	
+	private String userPw;
+
 	@Column(length = 100, nullable = false)
-	private String classB;
-	
-	@Column(length = 300, nullable = false)
-	private String crawlUrl;
-	
+	private String userNick;
+
+	@Column(length = 100, nullable = false)
+	private String userClass;
+
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date crawlAt;
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
+	private Date joinAt;
+
 }

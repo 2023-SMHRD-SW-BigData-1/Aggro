@@ -1,4 +1,4 @@
-package com.smhrd.bigdata.model;
+package com.smhrd.bigdata.entity;
 
 import java.io.Serializable;
 

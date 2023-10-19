@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonObject;
-import com.smhrd.bigdata.model.UserInfo;
+import com.smhrd.bigdata.entity.UserInfo;
 import com.smhrd.bigdata.repository.MainRepository;
 
 @Service
