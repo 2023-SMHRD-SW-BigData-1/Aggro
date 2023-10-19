@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,6 +95,25 @@ public class CommunityController {
 
 		communityService.updateCommunityHits(noticeSeq);
 
+	}
+
+	// 게시글 삭제
+	@DeleteMapping("/delete/{noticeSeq}")
+	public ResponseEntity<String> delete(@PathVariable("noticeSeq") Long noticeSeq,
+			@RequestHeader("Authorization") String jwtToken) {
+		// 토큰 전처리
+		jwtToken = jwtToken.replace("Bearer ", "");
+		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
+
+		if (result) { // 토큰값이 유효해야 저장할 수 있음
+
+			communityService.deleteNoticeBoard(noticeSeq);
+
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰값 만료");
+		}
+
+		return null;
 	}
 
 }

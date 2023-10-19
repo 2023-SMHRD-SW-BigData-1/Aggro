@@ -23,19 +23,20 @@ import lombok.Setter;
 public class CrawlSite {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long crawlSeq;
-	
+
 	@Column(length = 100, nullable = false)
 	private String classA;
-	
+
 	@Column(length = 100, nullable = false)
 	private String classB;
-	
+
 	@Column(length = 300, nullable = false)
 	private String crawlUrl;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
 	private Date crawlAt;
+
 }

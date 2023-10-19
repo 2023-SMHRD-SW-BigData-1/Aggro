@@ -19,10 +19,10 @@ import lombok.Setter;
 @Table
 @Entity
 public class Agree {
-	
+
 	@EmbeddedId
 	private AgreePK agreePK;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
 	private Date agreeAt;

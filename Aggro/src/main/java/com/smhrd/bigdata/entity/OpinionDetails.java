@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,18 +26,18 @@ import lombok.Setter;
 public class OpinionDetails {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long opinionSeq;
-	
+
 	@OneToOne
-	@JoinColumn(name="crawlSeq",referencedColumnName = "crawlSeq")
+	@JoinColumn(name = "crawlSeq", referencedColumnName = "crawlSeq", foreignKey = @ForeignKey(name = "fk_crawl_site_to_opinion_details"))
 	private CrawlSite crawlSeq;
-	
+
 	@Column(length = 4000, nullable = false)
 	private String opinionDetails;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
 	private Date opinionAt;
-	
+
 }

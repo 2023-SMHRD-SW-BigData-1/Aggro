@@ -127,4 +127,11 @@ public class CommunityService {
 		
 		communityHitsRepository.save(hits);
 	}
+	
+	// 게시글 삭제
+	public void deleteNoticeBoard(Long noticeSeq) {
+		
+		communityRepository.deleteById(noticeSeq);
+		
+	}
 }
