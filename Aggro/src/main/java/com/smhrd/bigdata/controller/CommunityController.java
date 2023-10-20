@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -151,6 +153,31 @@ public class CommunityController {
 		communityService.saveAgree(agreePK, noticeSeq);
 
 		return detailBoard(noticeSeq);
+	}
+
+	// 게시글 검색
+
+	@GetMapping("/find/{inputValue}")
+	public RequestBoardList searchBoard(@PathVariable("inputValue") String inputValue,
+			@RequestParam("searchOption") String searchOption) {
+
+		Pageable pageable = PageRequest.of(0, 10); // 0번째 페이지, 페이지당 10개의 항목
+
+		inputValue = inputValue.replace("04846", ""); // "0486"을 ""로 치환
+
+		RequestBoardList data = new RequestBoardList(); // 반환할 틀 생성
+
+		if (inputValue.equals("")) {
+			data.setData(communityService.dataList(pageable));
+		} else {
+			data.setData(communityService.searchBoardList(inputValue, pageable, searchOption)); // 데이터 가져와서 세팅하기
+		}
+
+		if (data.getData().size() < 10) { // 10000 페이지까지 보여주기 or 한 페이지에 10개 미만 이라면 다음 페이지 없음
+			data.setStatusCode(204); // default가 200이므로 제외
+		}
+
+		return data;
 	}
 
 }

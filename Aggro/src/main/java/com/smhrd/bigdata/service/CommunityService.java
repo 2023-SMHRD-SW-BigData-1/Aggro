@@ -50,12 +50,11 @@ public class CommunityService {
 		Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
 		Page<NoticeBoard> boardPage = communityRepository.findAll(sortedPageable); // 페이지화 해서 데이터 가져오기
-		List<NoticeBoard> boardList = boardPage.getContent(); // 가져온 데이이터에서 실제 내용만 가져오기
 
 		List<Object> dataList = new ArrayList<>(); // 빈 틀을 만들기 위한 Json 배열
 
 		// 가져온 게시글들을 하나씩 담는 과정
-		for (NoticeBoard board : boardList) {
+		for (NoticeBoard board : boardPage) {
 			// JsonObject dto = new JsonObject();
 			CommunityDto dto = new CommunityDto();
 			// dto.addProperty("type", 1);
@@ -148,6 +147,7 @@ public class CommunityService {
 		commentRepository.deleteById(commentSeq);
 	}
 
+	// 추천 누르기
 	public void saveAgree(AgreePK agreePK, Long noticeSeq) {
 
 		NoticeBoard board = new NoticeBoard();
@@ -160,6 +160,52 @@ public class CommunityService {
 		agree.setAgreePK(agreePK);
 
 		agreeRepository.save(agree);
+
+	}
+
+	// 게시글 검색하기
+	public List<Object> searchBoardList(String inputValue, Pageable pageable, String searchOption) {
+
+		Sort sort = Sort.by(Sort.Direction.DESC, "noticeSeq");
+		Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+		// titleAndDetails default
+
+		Page<NoticeBoard> boardPage = null;
+
+		switch (searchOption) {
+		case "writer":
+			boardPage = communityRepository.findByUserId_UserNick(inputValue, sortedPageable);
+			break;
+
+		case "titleAndDetails":
+			boardPage = communityRepository.findAllByTitleLikeOrDetailsLike(inputValue, sortedPageable);
+			break;
+		
+		default:
+			boardPage = communityRepository.findAllByTitleLike(inputValue, sortedPageable);
+			break;
+		}
+
+		List<Object> dataList = new ArrayList<>(); // 빈 틀을 만들기 위한 Json 배열
+
+		// 가져온 게시글들을 하나씩 담는 과정
+		for (NoticeBoard board : boardPage) {
+			// JsonObject dto = new JsonObject();
+			CommunityDto dto = new CommunityDto();
+			// dto.addProperty("type", 1);
+			dto.setType(1);
+
+			Post post = new Post();
+			post.setBoard(board);
+			post.setReplies(commentRepository.findAllByNoticeSeq(board));
+
+			dto.setPost(post);
+
+			dataList.add(dto);
+		}
+
+		return dataList;
 
 	}
 }

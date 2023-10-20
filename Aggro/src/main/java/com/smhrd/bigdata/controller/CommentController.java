@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.smhrd.bigdata.entity.Comment;
 import com.smhrd.bigdata.service.CommunityService;
 import com.smhrd.bigdata.service.JwtTokenService;
@@ -36,10 +35,6 @@ public class CommentController {
 		if (!result) { // 토큰값이 유효해야 저장할 수 있음
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰값 만료");
 		}
-
-		Gson gson = new Gson();
-
-		System.out.println(gson.toJsonTree(comment));
 
 		communityService.saveCommentWrite(comment);
 
