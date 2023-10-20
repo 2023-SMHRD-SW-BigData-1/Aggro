@@ -30,7 +30,7 @@ public class NoticeBoard {
 	private Long noticeSeq;
 
 	@ManyToOne
-	@JoinColumn(name = "userId", foreignKey = @ForeignKey(name = "fk_user_info_to_notice_board", foreignKeyDefinition = "FOREINGN KEY (user_id) REFERENCES user_info(user_id) ON DELETE SET NULL"))
+	@JoinColumn(name = "userId", foreignKey = @ForeignKey(name = "fk_user_info_to_notice_board", foreignKeyDefinition = "FOREIGN KEY (user_id) REFERENCES user_info(user_id) ON DELETE SET NULL"))
 	private UserInfo userId;
 
 	@Temporal(TemporalType.TIMESTAMP)

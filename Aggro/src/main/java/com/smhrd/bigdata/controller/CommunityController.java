@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.smhrd.bigdata.dto.RequestBoardDetail;
 import com.smhrd.bigdata.dto.RequestBoardList;
-import com.smhrd.bigdata.entity.AgreePK;
+import com.smhrd.bigdata.entity.Agree;
 import com.smhrd.bigdata.entity.NoticeBoard;
 import com.smhrd.bigdata.service.CommunityService;
 import com.smhrd.bigdata.service.JwtTokenService;
@@ -138,10 +137,13 @@ public class CommunityController {
 
 	// 게시글 추천
 	@PutMapping("/update/like/{noticeSeq}")
-	public RequestBoardDetail updateAgree(@RequestBody AgreePK agreePK, @PathVariable("noticeSeq") Long noticeSeq,
+	public RequestBoardDetail updateAgree(@RequestBody Agree agree, @PathVariable("noticeSeq") Long noticeSeq,
 			@RequestHeader("Authorization") String jwtToken) {
 
 		Gson gson = new Gson();
+		
+		System.out.println(gson.toJsonTree(agree));
+		
 		// 토큰 전처리
 		jwtToken = jwtToken.replace("Bearer ", "");
 		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
@@ -150,7 +152,7 @@ public class CommunityController {
 			return detailBoard(noticeSeq);
 		}
 
-		communityService.saveAgree(agreePK, noticeSeq);
+		communityService.saveAgree(agree, noticeSeq);
 
 		return detailBoard(noticeSeq);
 	}

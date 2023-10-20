@@ -34,7 +34,7 @@ public class Comment {
 	private NoticeBoard noticeSeq;
 
 	@ManyToOne
-	@JoinColumn(name = "userId", foreignKey = @ForeignKey(name = "fk_user_info_to_comment", foreignKeyDefinition = "FOREINGN KEY (user_id) REFERENCES user_info(user_id) ON DELETE SET NULL"))
+	@JoinColumn(name = "userId", referencedColumnName = "userId", foreignKey = @ForeignKey(name = "fk_user_info_to_comment", foreignKeyDefinition = "FOREIGN KEY (user_id) REFERENCES user_info(user_id) ON DELETE SET NULL"))
 	private UserInfo userId;
 
 	@Column(length = 100, nullable = false)

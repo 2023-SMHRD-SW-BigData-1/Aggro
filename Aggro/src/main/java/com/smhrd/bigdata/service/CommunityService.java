@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.smhrd.bigdata.dto.CommunityDto;
 import com.smhrd.bigdata.dto.Post;
 import com.smhrd.bigdata.entity.Agree;
-import com.smhrd.bigdata.entity.AgreePK;
 import com.smhrd.bigdata.entity.Comment;
 import com.smhrd.bigdata.entity.CommunityHits;
 import com.smhrd.bigdata.entity.NoticeBoard;
@@ -93,14 +93,8 @@ public class CommunityService {
 			post.setBoard(board); // 게시글 정보 담기
 			post.setReplies(commentRepository.findAllByNoticeSeq(board)); // 댓글 정보 담기
 
-			// 추천수 확인을 위한 데이터 세팅하기
-			AgreePK agreePK = new AgreePK();
-
-			agreePK.setNoticeSeq(post);
-			agreePK.setUserId(post.getUserId());
-
 			// 추천수 데이터 가져오기
-			post.setLikeCount(agreeRepository.countAllByAgreePK(agreePK));
+			post.setLikeCount(agreeRepository.countAllByNoticeSeq(board));
 
 			// 조회수 가져오기
 			post.setViewCount(communityHitsRepository.countAllByNoticeSeq(board));
@@ -148,16 +142,18 @@ public class CommunityService {
 	}
 
 	// 추천 누르기
-	public void saveAgree(AgreePK agreePK, Long noticeSeq) {
+	public void saveAgree(Agree agree, Long noticeSeq) {
 
+		Gson gson = new Gson();
+		
+		System.out.println(gson.toJsonTree(agree));
+		
 		NoticeBoard board = new NoticeBoard();
 
 		board.setNoticeSeq(noticeSeq);
-		agreePK.setNoticeSeq(board);
-
-		Agree agree = new Agree();
-
-		agree.setAgreePK(agreePK);
+		agree.setNoticeSeq(board);
+		
+		System.out.println(gson.toJsonTree(agree));
 
 		agreeRepository.save(agree);
 
