@@ -64,6 +64,8 @@ public class CommunityService {
 			post.setBoard(board);
 			post.setReplies(commentRepository.findAllByNoticeSeq(board));
 
+			post.setViewCount(agreeRepository.countAllByNoticeSeq(board));
+
 			dto.setPost(post);
 
 			dataList.add(dto);
@@ -144,16 +146,10 @@ public class CommunityService {
 	// 추천 누르기
 	public void saveAgree(Agree agree, Long noticeSeq) {
 
-		Gson gson = new Gson();
-		
-		System.out.println(gson.toJsonTree(agree));
-		
 		NoticeBoard board = new NoticeBoard();
 
 		board.setNoticeSeq(noticeSeq);
 		agree.setNoticeSeq(board);
-		
-		System.out.println(gson.toJsonTree(agree));
 
 		agreeRepository.save(agree);
 
@@ -177,7 +173,7 @@ public class CommunityService {
 		case "titleAndDetails":
 			boardPage = communityRepository.findAllByTitleLikeOrDetailsLike(inputValue, sortedPageable);
 			break;
-		
+
 		default:
 			boardPage = communityRepository.findAllByTitleLike(inputValue, sortedPageable);
 			break;

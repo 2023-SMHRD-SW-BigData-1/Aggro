@@ -8,9 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RequestBoardDetail {
-	
+
 	private int statusCode = 201;
-	
+
 	private Object data;
-	
+
 }

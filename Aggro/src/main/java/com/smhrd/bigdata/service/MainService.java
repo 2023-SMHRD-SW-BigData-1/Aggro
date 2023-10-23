@@ -26,13 +26,8 @@ public class MainService {
 	// 아이디 중복체크
 	public boolean idCheck(String userId) {
 
-		UserInfo info = repository.findOneByUserId(userId);
+		return repository.existsByUserId(userId);
 
-		if (info == null) {
-			return false;
-		}
-
-		return true;
 	}
 
 	public JsonObject login(UserInfo userInfo) {
@@ -40,7 +35,7 @@ public class MainService {
 
 		if (result != null) {
 			// 조건에 맞는 결과가 있을 때의 처리
-			String jwtToken = tokenService.createJwtToken(result.getUserId());
+			String jwtToken = tokenService.createJwtToken(result);
 
 			JsonObject data = new JsonObject();
 			data.addProperty("userId", result.getUserId());

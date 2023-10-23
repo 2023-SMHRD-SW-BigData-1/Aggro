@@ -11,5 +11,7 @@ public interface MainRepository extends JpaRepository<UserInfo, String> {
 	UserInfo findOneByUserId(String userId);
 
 	UserInfo findOneByUserIdAndUserPw(String userId, String userPw);
+	
+	boolean existsByUserId(String userId);
 
 }

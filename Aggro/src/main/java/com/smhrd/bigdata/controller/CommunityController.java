@@ -58,13 +58,17 @@ public class CommunityController {
 	public ResponseEntity<String> writeProc(@RequestBody NoticeBoard board, // 게시글 정보 가져오기
 			@RequestHeader("Authorization") String jwtToken) { // 토근이 저장된 Header 가져오기
 
+		Gson gson = new Gson();
+
 		// 토큰 전처리
 		jwtToken = jwtToken.replace("Bearer ", "");
-		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
+		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 3시간 유효
 
 		if (!result) { // 토큰값이 유효해야 저장할 수 있음
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰값 만료");
 		}
+
+		board.setUserId(tokenService.getUserIdFromToken(jwtToken));
 
 		communityService.write(board);
 
@@ -92,7 +96,7 @@ public class CommunityController {
 			@RequestHeader("Authorization") String jwtToken) {
 		// 토큰 전처리
 		jwtToken = jwtToken.replace("Bearer ", "");
-		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
+		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 3시간 유효
 
 		communityService.updateCommunityHits(noticeSeq);
 
@@ -104,7 +108,7 @@ public class CommunityController {
 			@RequestHeader("Authorization") String jwtToken) {
 		// 토큰 전처리
 		jwtToken = jwtToken.replace("Bearer ", "");
-		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
+		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 3시간 유효
 
 		if (!result) { // 토큰값이 유효해야 저장할 수 있음
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰값 만료");
@@ -122,12 +126,13 @@ public class CommunityController {
 
 		// 토큰 전처리
 		jwtToken = jwtToken.replace("Bearer ", "");
-		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
+		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 3시간 유효
 
 		if (!result) { // 토큰값이 유효해야 저장할 수 있음
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰값 만료");
-
 		}
+
+		board.setUserId(tokenService.getUserIdFromToken(jwtToken));
 
 		communityService.updateNoticeBoard(board);
 
@@ -137,28 +142,23 @@ public class CommunityController {
 
 	// 게시글 추천
 	@PutMapping("/update/like/{noticeSeq}")
-	public RequestBoardDetail updateAgree(@RequestBody Agree agree, @PathVariable("noticeSeq") Long noticeSeq,
-			@RequestHeader("Authorization") String jwtToken) {
+	public ResponseEntity<RequestBoardDetail> updateAgree(@RequestBody Agree agree,
+			@PathVariable("noticeSeq") Long noticeSeq, @RequestHeader("Authorization") String jwtToken) {
 
-		Gson gson = new Gson();
-		
-		System.out.println(gson.toJsonTree(agree));
-		
 		// 토큰 전처리
 		jwtToken = jwtToken.replace("Bearer ", "");
-		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 1시간 유효
+		Boolean result = tokenService.validateJwtToken(jwtToken); // 토큰값 검사, 3시간 유효
 
 		if (!result) { // 토큰값이 유효해야 저장할 수 있음
-			return detailBoard(noticeSeq);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(detailBoard(noticeSeq));
 		}
 
 		communityService.saveAgree(agree, noticeSeq);
 
-		return detailBoard(noticeSeq);
+		return ResponseEntity.status(HttpStatus.OK).body(detailBoard(noticeSeq));
 	}
 
 	// 게시글 검색
-
 	@GetMapping("/find/{inputValue}")
 	public RequestBoardList searchBoard(@PathVariable("inputValue") String inputValue,
 			@RequestParam("searchOption") String searchOption) {
