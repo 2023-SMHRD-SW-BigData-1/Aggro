@@ -195,6 +195,7 @@ public class CommunityService {
 			dto.setPost(post);
 
 			dataList.add(dto);
+			System.out.println();
 		}
 
 		return dataList;
