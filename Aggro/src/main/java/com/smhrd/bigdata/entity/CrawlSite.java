@@ -27,13 +27,22 @@ public class CrawlSite {
 	private Long crawlSeq;
 
 	@Column(length = 100, nullable = false)
-	private String classA;
+	private String mainCategory; // 크롤링 사이트 대분류
 
 	@Column(length = 100, nullable = false)
-	private String classB;
+	private String subCategory; // 크롤링 사이트 소분류
 
 	@Column(length = 300, nullable = false)
 	private String crawlUrl;
+	
+	@Column(length = 4000, nullable = false)
+	private String crawlTitle;
+	
+	@Column(length = 4000, nullable = false)
+	private String crawlContent;
+	
+	@Column(length = 400, nullable = false)
+	private int crawlViewCount;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
