@@ -2,10 +2,9 @@ package com.smhrd.bigdata.controller;
 
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +18,12 @@ public class DetailRestController {
 	@Autowired
 	DetailService detailService;
 
-	@GetMapping("/{searchWord}")
-	public List<CrawlSite> searchWordRanking(@PathParam("searchWord") String searchWord) {
+	@GetMapping(value = { "/detail/{searchWord}", "/detail" })
+	public List<CrawlSite> searchWordRanking(@PathVariable(name = "searchWord", required = false) String searchWord) {
+
+		if (searchWord == null) {
+			searchWord = "";
+		}
 
 		return detailService.searchWordRanking(searchWord);
 
