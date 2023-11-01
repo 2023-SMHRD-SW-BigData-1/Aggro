@@ -12,5 +12,9 @@ public interface CrawlSiteRepository extends JpaRepository<CrawlSite, Long> {
 
 	@Query("SELECT cs FROM CrawlSite cs where cs.crawlTitle LIKE %:text% OR cs.crawlContent LIKE %:text%")
 	List<CrawlSite> findAllByCrawlTitleLikeOrCrawlContent(@Param("text") String text);
+	
+	
+	@Query("SELECT cs.crawlTitle FROM CrawlSite cs where cs.crawlTitle LIKE %:text% OR cs.crawlContent LIKE %:text%")
+	List<String> findCrawlTitleByCrawlTitleLikeOrCrawlContent(@Param("text") String text);
 
 }

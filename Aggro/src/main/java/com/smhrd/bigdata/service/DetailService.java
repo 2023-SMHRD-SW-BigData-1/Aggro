@@ -17,4 +17,9 @@ public class DetailService {
 	public List<CrawlSite> searchWordRanking(String text) {
 		return crawlSiteRepository.findAllByCrawlTitleLikeOrCrawlContent(text);
 	}
+	
+	public List<String> searchWordTitle(String text){
+		
+		return crawlSiteRepository.findCrawlTitleByCrawlTitleLikeOrCrawlContent(text);
+	}
 }
