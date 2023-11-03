@@ -33,6 +33,8 @@ public class OpinionDetails {
 	@JoinColumn(name = "crawlSeq", referencedColumnName = "crawlSeq", foreignKey = @ForeignKey(name = "fk_crawl_site_to_opinion_details"))
 	private CrawlSite crawlSeq;
 	
+	@Column(length = 100, nullable = false, unique = true)
+	private String opinion;
 
 	@Column(length = 4000, nullable = false)
 	private String opinionDetails;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smhrd.bigdata.entity.CrawlSite;
+import com.smhrd.bigdata.entity.OpinionDetails;
 import com.smhrd.bigdata.service.DetailService;
 
 @RestController
@@ -21,11 +22,25 @@ public class DetailRestController {
 	@GetMapping(value = { "/detail/{searchWord}", "/detail" })
 	public List<CrawlSite> searchWordRanking(@PathVariable(name = "searchWord", required = false) String searchWord) {
 
-		if (searchWord == null) {
+		if (searchWord == null && !(searchWord.equals("undefined"))) {
 			searchWord = "";
 		}
 
 		return detailService.searchWordRanking(searchWord);
+
+	}
+
+	@GetMapping("/analyOpinion/{searchWord}")
+	public String opinionDetail(@PathVariable(name = "searchWord", required = false) String searchWord) {
+
+		if (!(searchWord.equals("undefined"))) {
+
+			OpinionDetails opinionDetails = detailService.searchWordOpinion(searchWord);
+
+			return opinionDetails.getOpinionDetails();
+		}
+
+		return null;
 
 	}
 }
