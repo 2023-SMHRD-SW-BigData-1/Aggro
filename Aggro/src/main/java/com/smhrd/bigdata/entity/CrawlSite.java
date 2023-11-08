@@ -26,26 +26,23 @@ public class CrawlSite {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long crawlSeq;
 
-	@Column(length = 100, nullable = false)
+	@Column(length = 100)
 	private String mainCategory; // 크롤링 사이트 대분류
 
-	@Column(length = 100, nullable = false)
+	@Column(length = 100)
 	private String subCategory; // 크롤링 사이트 소분류
 
-	@Column(length = 300, nullable = false)
+	@Column(length = 1000, nullable = false, unique = true)
 	private String crawlUrl;
 	
-	@Column(length = 4000, nullable = false)
+	@Column(length = 4000)
 	private String crawlTitle;
-	
-	@Column(length = 4000, nullable = false)
-	private String crawlContent;
 	
 	@Column(length = 400, nullable = false)
 	private int crawlViewCount;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
 	private Date crawlAt;
 
 }

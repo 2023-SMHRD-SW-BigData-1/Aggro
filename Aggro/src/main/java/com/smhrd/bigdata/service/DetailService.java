@@ -20,12 +20,12 @@ public class DetailService {
 	OpinionDetailsRepository opinionDetailsRepository;
 	
 	public List<CrawlSite> searchWordRanking(String text) {
-		return crawlSiteRepository.findAllByCrawlTitleLikeOrCrawlContent(text);
+		return crawlSiteRepository.findAllByCrawlTitleLike(text);
 	}
 	
 	public List<String> searchWordTitle(String text){
 		
-		return crawlSiteRepository.findCrawlTitleByCrawlTitleLikeOrCrawlContent(text);
+		return crawlSiteRepository.findCrawlTitleByCrawlTitleLike(text);
 	}
 	
 	public OpinionDetails searchWordOpinion(String text) {
